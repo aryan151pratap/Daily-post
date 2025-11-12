@@ -1,0 +1,77 @@
+export const postsData = [
+  {
+    id: 1,
+    username: "Aryan Singh",
+    bio: "Engineering Student",
+    caption: "Exploring Tailwind CSS ✨ #frontend #react",
+    likes: 24,
+    unlikes: 0,
+    comments: [
+      { username: "Neha", bio: "Engineering Student", text: "Wow! Great work 😍" },
+      { username: "Ravi", bio: "Engineering Student", text: "This looks awesome 🔥" },
+      { username: "Priya", bio: "Engineering Student", text: "Keep it up 👏👏" },
+    ],
+  },
+  {
+    id: 2,
+    username: "Neha Verma",
+    bio: "Frontend Developer",
+    caption: "Just finished a cool portfolio project 💻 #WebDev #UIUX",
+    likes: 42,
+    unlikes: 1,
+    comments: [
+      { username: "Aryan", bio: "Engineering Student", text: "Looks amazing! 🔥" },
+      { username: "Ravi", bio: "UI Designer", text: "Super clean design 😍" },
+    ],
+  },
+  {
+    id: 3,
+    username: "Ravi Sharma",
+    bio: "UI/UX Designer",
+    caption: "Design is intelligence made visible. 🎨",
+    likes: 30,
+    unlikes: 2,
+    comments: [
+      { username: "Priya", bio: "Engineering Student", text: "Love your creativity 💡" },
+      { username: "Neha", bio: "Frontend Developer", text: "Perfectly said 👏" },
+    ],
+  },
+  {
+    id: 4,
+    username: "Priya Patel",
+    bio: "IoT Enthusiast",
+    caption: "My ESP32 project just got smarter! ⚙️ #IoT #Innovation",
+    likes: 55,
+    unlikes: 3,
+    comments: [
+      { username: "Aryan", bio: "Engineering Student", text: "That’s next level 🤖" },
+      { username: "Neha", bio: "Frontend Developer", text: "Would love to see a demo! 🔥" },
+      { username: "Ravi", bio: "UI Designer", text: "Incredible work 👏" },
+    ],
+  },
+  {
+    id: 5,
+    username: "Karan Mehta",
+    bio: "Full Stack Developer",
+    caption: "Learning backend with Express.js 🚀 #NodeJS #MongoDB",
+    likes: 38,
+    unlikes: 1,
+    comments: [
+      { username: "Aryan", bio: "Engineering Student", text: "Backend is fun, right? 😎" },
+      { username: "Priya", bio: "IoT Enthusiast", text: "Express makes life easier 🔥" },
+    ],
+  },
+  {
+    id: 6,
+    username: "Simran Kaur",
+    bio: "ML Enthusiast",
+    caption: "Training my first image classifier 🧠 #AI #Python",
+    likes: 62,
+    unlikes: 4,
+    comments: [
+      { username: "Ravi", bio: "UI Designer", text: "AI is the future 🚀" },
+      { username: "Neha", bio: "Frontend Developer", text: "Can't wait to see results 😍" },
+      { username: "Aryan", bio: "Engineering Student", text: "Awesome progress 👏" },
+    ],
+  },
+];
