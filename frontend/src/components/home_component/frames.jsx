@@ -5,11 +5,11 @@ import image3 from '../../images/image3.png';
 import { useState } from "react";
 import { useEffect } from "react";
 
-const Frames = function(){
-	const images = [image2, image, image3];
+const Frames = function({image}){
+	const [images, setImages] = useState([]);
 	const [play, setPlay] = useState(false);
 	const [current, setCurrent] = useState(0);
-
+	
 	const handleFrame = function(direction){
 		let frame = images.length;
 		if(direction == "left"){
@@ -21,33 +21,53 @@ const Frames = function(){
 		}
 	}
 
+
+	useEffect(() => {
+		if(image.length > 0){
+			setImages(image);
+		}
+	}, [image])
+
 	useEffect(() => {
 		let interval;
 		if (play) {
 		interval = setInterval(() => {
 			setCurrent((prev) => (prev + 1) % images.length);
-		}, 2000); // change image every 2 seconds
+		}, 2000);
 		}
 		return () => clearInterval(interval);
 	}, [play, images.length]);
 
 	return(
-		<div>
-			<div className="h-full border-t border-zinc-200">
+		<div className="">
+			<div className="h-full border-t border-b border-zinc-200">
 
+				{images.length > 1 ? 
 				<div className="relative min-h-55 flex items-center justify-center overflow-">
 					{images.map((img, index) => (
-					<img
-						key={index}
-						src={img}
-						alt=""
-						className={`absolute h-full w-fit object-cover transition-opacity duration-700 ease-in-out ${
-						index === current ? "opacity-100" : "opacity-0"
-						}`}
-					/>
+						<img
+							key={index}
+							src={img}
+							alt=""
+							className={`absolute h-full w-fit object-cover transition-opacity duration-700 ease-in-out ${
+							index === current ? "opacity-100" : "opacity-0"
+							}`}
+						/>
 					))}				
 				</div>
+				:
+			
+				<div className="w-full h-full flex items-center justify-center">
+					<img
+						src={images[current]}
+						alt=""
+						className={`h-fit w-fit object-cover transition-opacity duration-700 ease-in-out`}
+					/>
+					
+				</div>
+				}
 
+				{images.length > 1 &&
 				<div className="h-1 flex w-full bg-rose-200 overflow-hidden">
 					{images.map((_, index) => (
 						<div
@@ -59,7 +79,9 @@ const Frames = function(){
 						></div>
 					))}
 				</div>
+				}
 
+				{images.length > 1 &&
 				<div className="w-full p-1 text-sm text-zinc-500 flex flex-row gap-5 items-center">
 					<div className="w-full flex flex-row gap-5 justify-center">
 						<FaArrowLeft  className="focus:text-zinc-700 cursor-pointer hover:text-zinc-600"
@@ -82,6 +104,9 @@ const Frames = function(){
 						{current+1}/{images.length}
 					</div>
 				</div>
+				}
+
+				
 			</div>
 		</div>
 	)

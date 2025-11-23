@@ -2,11 +2,13 @@ import React from "react";
 import { useState } from "react";
 import {FaBell, FaHome, FaSearch, FaUser} from "react-icons/fa";
 import user from '../images/image.png';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 
 const Header = function({select, setSelect}){
-	const feature = [{name:"home", icon:<FaHome/>}, {name:"search", icon: <FaSearch/>}, {name:"user", icon: <FaUser/>}, {name:"Notification", icon: <FaBell/>}];
+	const feature = [{name:"home", icon:<FaHome/>}, {name:"search", icon: <FaSearch/>}, {name:"user", icon: <FaUser/>}, {name:"notification", icon: <FaBell/>}];
 	const [image, setImage] = useState(null);
+	const [notify, setNotify] = useState(["connect"]);
 	
 	return(
 		<div className="w-full flex flex-row bg-white shadow-md">
@@ -15,7 +17,16 @@ const Header = function({select, setSelect}){
 					<div key={index} className="cursor-pointer"
 						onClick={() => setSelect(i)}
 					>
-						{React.cloneElement(i.icon, { className: `${ i.name == select.name  ? "text-rose-500 hover:text-rose-700" : "text-zinc-500 hover:text-zinc-700"} text-xl transition`})}
+						<Link to={`/${i?.name}`}>
+							<div className="relative">
+								{i?.name == "notification" && notify.length > 0 &&
+								<div className="absolute text-xs border border-white font-mono w-5 h-5 flex items-center justify-center bottom-2 left-2 bg-rose-500 hover:bg-rose-400 rounded-full">
+									<p className="text-rose-100">10</p>
+								</div>
+								}
+								{React.cloneElement(i.icon, { className: `${ i.name == select.name  ? "text-rose-500 hover:text-rose-700" : "text-zinc-500 hover:text-zinc-700"} text-xl transition`})}
+							</div>
+						</Link>
 					</div>
 				))}
 			</div>

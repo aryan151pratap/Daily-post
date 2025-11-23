@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { FaComment, FaPaperPlane, FaTrash } from "react-icons/fa";
+import { FaComment, FaPaperPlane, FaThumbsUp, FaTrash } from "react-icons/fa";
 import user from '../../images/image.png';
 import EmojiPicker from "emoji-picker-react";
 
-function CommentBox({details, setDetails}) {
+const VITE_BACKEND = import.meta.env.VITE_BACKEND;
+
+function CommentBox({details, setDetails, id, userData}) {
 	const [comment, setComment] = useState("");
 	const [showPicker, setShowPicker] = useState(false);
 
@@ -11,10 +13,45 @@ function CommentBox({details, setDetails}) {
 		setComment((prev) => prev + emojiData.emoji);
 	};
 
-	const handleSend = function(){
+	const handleSend = async function(){
 		if(!comment.trim()) return 0;
-		setDetails({...details, comment: comment});
+		const data = {email: userData.email ,comment};
+
+		const res = await fetch(`${VITE_BACKEND}/comment/${id}`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(data)
+		});
+
+		const result = await res.json();
+		if(res.ok){
+			console.log(result);
+			setComment("");
+		}
+		setDetails(prev => ({
+			...prev,
+			comment: [...prev.comment, {user: userData, comment}]
+		}));
 	}
+
+	const handleDelete = async function(commentId){
+		try{
+			const res = await fetch(`${VITE_BACKEND}/deleteComment/${id}/${commentId}`, {
+				method: "GET"
+			});
+			if(res.ok){
+				const comments = details.comment.filter((i) => i._id !== commentId);
+				setDetails(prev => ({
+					...prev,
+					comment: comments
+				}));
+			}
+		} catch(err){
+			console.log(err);
+		}
+	}
+
+
 	return (
 		<div className='px-4 py-2 w-full flex flex-col border-t border-zinc-200'>
 			<p className='mt-2 mb-2 text-sm flex items-top gap-1 px-1'>Comments 
@@ -48,22 +85,29 @@ function CommentBox({details, setDetails}) {
 				)}
 			</div>
 
-			<div className='p-2 flex flex-col gap-4'>
-				{details?.map((i, index) => (
-					<div className='flex flex-col gap-2 justify-center'>
-						<div className="w-fit flex flex-row gap-5 items-center cursor-pointer">
-							<img src={user} alt="" className='border border-zinc-400 w-10 h-10 objet-cover rounded-full'/>
-							<p className="hover:underline">
-								{i?.username}
-								<p className="text-xs text-zinc-600">{i?.bio}</p>
-							</p>
-
+			<div className='py-2 flex flex-col gap-5'>
+				{details?.comment?.map((i, index) => (
+					<div key={index} className='flex flex-col gap-2 justify-center'>
+						<div className="w-fit flex flex-row gap-3 items-center cursor-pointer">
+							<img src={user} alt="" className='border border-zinc-400 w-8 h-8 objet-cover rounded-full'/>
+							<div className="hover:underline">
+								<p className="text-sm text-zinc-800 font-semibold">{i?.user?.username}</p>
+								<p className="text-xs text-zinc-500">{i?.user?.email}</p>
+							</div>
 						</div>
-						<div className="group ml-12 p-1 flex flex-row items-center justify-between bg-rose-50 hover:bg-rose-200/50 rounded-md transition duration-300">
-							<pre className="text-sm font-sans whitespace-pre-wrap">{i?.text}</pre>
-							<div className="mt-auto p-2 opacity-0 group-hover:opacity-100 hover:bg-rose-400/40 rounded-md text-rose-700 transition duration-100 cursor-pointer text-sm">
+						<div className="group ml-10 text-zinc-800 flex flex-row items-center justify-between bg-rose-50 hover:bg-rose-200/50 rounded-md transition duration-300">
+							<pre className="px-2 text-sm font-sans whitespace-pre-wrap">{i?.comment}</pre>
+							{i?.user?._id == userData?._id ?
+							<div className="mt-auto p-2 sm:opacity-0 group-hover:opacity-100 hover:bg-rose-400/40 rounded-r-md text-rose-700 transition duration-100 cursor-pointer text-sm"
+								onClick={() => handleDelete(i?._id)}
+							>
 								<FaTrash className=""/>
 							</div>
+							:
+							<div className="p-2 text-rose-600 sm:text-rose-400 hover:text-rose-600 bg-rose-200 sm:bg-rose-50 hover:bg-rose-200 rounded-r-md cursor-pointer">
+								<FaThumbsUp/>
+							</div>
+							}
 						</div>
 					</div>
 				))}

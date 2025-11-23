@@ -2,7 +2,7 @@ import image from '../../images/image4.png';
 
 const News = function(){
 	return(
-		<div className="p-4 w-full h-full">
+		<div className="p-4 max-w-sm h-full ml-auto">
 			<div className="w-full h-full bg-white border border-zinc-200 rounded-md">
 				<div className="p-2 flex justify-between items-center border-b border-zinc-200">
 					<p className='text-sm italic'>Daily News</p>
@@ -18,7 +18,7 @@ const News = function(){
 						<img src={image} alt="" className=''/>
 					</div>
 					<div className='flex justify-end p-1 text-xs text-zinc-400'>
-						<p className='flex flex-col'>By -<p className='hover:underline cursor-pointer'>Aryan Pratap</p></p>
+						<div className='flex flex-col'>By -<p className='hover:underline cursor-pointer'>Aryan Pratap</p></div>
 					</div>
 				</div>
 			</div>
