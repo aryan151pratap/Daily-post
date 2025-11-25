@@ -1,14 +1,15 @@
 import { FaArrowLeft, FaArrowRight, FaEdit, FaUser } from "react-icons/fa";
 import user from "../images/image.png";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EditProfile from "./userEdit";
 import Media from "./home_component/media";
 import Post from "./post";
 
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
-const User = function({setLoading, userData, setSelect}){
+const User = function({setLoading, userData, setSelect, setEnter}){
+	const navigate = useNavigate();
 	const {id} = useParams();
 	const [data, setData] = useState(null);
 	const [post, setPost] = useState(null);
@@ -55,6 +56,14 @@ const User = function({setLoading, userData, setSelect}){
 			setCurrentPost((e) => e+1%postCount);
 		}
 	}
+
+	const handleLogout = function(){
+		const email = localStorage.getItem("daily-post-email");
+		if(!email) return;
+		localStorage.removeItem("daily-post-email");
+		setEnter(false);
+		navigate("/");
+	}
 	return(
 		<div className="lg:w-xl w-full sm:p-4 h-full">
 			<div className="min-h-40 bg-white border border-zinc-200 sm:rounded-md shadow-sm">
@@ -72,8 +81,13 @@ const User = function({setLoading, userData, setSelect}){
 				<div className="px-4 w-full flex flex-col justify-end p-2">
 					<p className="text-lg font-semibold flex gap-2 items-center">{data?.username}<span className="text-sm text-zinc-700 font-normal">{data?.email}</span></p>
 					<p className="text-sm p-1">{data?.bio}</p>
-					<div className="ml-auto mt-2 flex flex-row gap-2">
-						<p className={`flex gap-2 text-sm px-2 p-1 rounded-md w-fit ${data?.bgColor}/40 text-${data?.bgColor.split("-")[1]}-700`}>
+					<div className="w-full ml-auto mt-2 flex flex-row gap-2">
+						<div className="mr-auto text-sm px-2 p-1 bg-rose-600 text-white hover:bg-rose-700 rounded-md cursor-pointer"
+							onClick={() => handleLogout()}
+						>
+							Logout
+						</div>
+						<p className={`flex gap-2 text-sm px-2 p-1 rounded-md w-fit ${data?.bgColor}/40 text-${data?.bgColor?.split("-")[1]}-700`}>
 							<span className="font-semibold">Total {postCount > 1 ? "Posts" : "Post"} - </span>
 							<span className="font-bold">{postCount}</span>
 						</p>
@@ -109,9 +123,10 @@ const User = function({setLoading, userData, setSelect}){
 					</div>
 					}
 
-					{postCount > 0 && currentPost <= post?.length-1 ?
+					{postCount > 0 && currentPost <= post?.length-1 &&
 						<Media data={{...post[currentPost], userId: data}} userData={userData}/>
-						:
+					}
+					{postCount > 0 && currentPost > post?.length-1 &&
 						<div className="h-50 w-full flex gap-2 items-center justify-center">
 							<div className="p-4 border-2 rounded-full border-t-transparent border-b-transparent animate-spin"></div>
 							<p className="font-semibold">loading...</p>

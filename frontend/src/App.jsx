@@ -46,7 +46,7 @@ function App() {
               <>
                 <Route path="/home" element={<Home setLoading={setLoading} userData={userData}/>} />
                 <Route path="/search" element={<Search setLoading={setLoading} userData={userData}/>} />
-                <Route path="/user/:id" element={<User setLoading={setLoading} userData={userData} setSelect={setSelect}/>} />
+                <Route path="/user/:id" element={<User setLoading={setLoading} userData={userData} setSelect={setSelect} setEnter={setEnter}/>} />
                 <Route path="/notification" element={<Home setLoading={setLoading} userData={userData}/>} />
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="/user" element={<Navigate to="/home" />} />

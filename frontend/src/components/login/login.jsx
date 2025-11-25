@@ -50,7 +50,9 @@ const Login = function({setEnter, setLoading, setUserData}) {
     const result = await res.json();
     if(res.ok){
       localStorage.setItem("daily-post-email", email);
+      setLoading(false);
       setEnter(true);
+      setUserData(result.user);
       navigate("/home");
     } else {
       if(result?.status == 400){
