@@ -12,7 +12,7 @@ const Header = function({select, setSelect, userData}){
 	
 	return(
 		<div className="w-full flex flex-row bg-white shadow-md">
-			<div className="p-4 flex items-center gap-10 ml-auto">
+			<div className="p-4 flex items-center sm:gap-10 gap-6 ml-auto">
 				{feature.map((i, index) => (
 					<div key={index} className="cursor-pointer"
 						onClick={() => setSelect(i)}
@@ -35,7 +35,7 @@ const Header = function({select, setSelect, userData}){
 					<div className="w-10 h-10">
 						<img src={userData?.image ? userData?.image : user} alt="" className='h-full w-full object-cover rounded-full'/>
 					</div>
-					<p className="py-2 font-semibold">{userData?.username}</p>
+					<p className="shrink-0 py-2 font-semibold">{userData?.username}</p>
 				</div>
 			</div>
 		</div>

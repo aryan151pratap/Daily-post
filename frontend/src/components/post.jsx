@@ -188,7 +188,8 @@ function Post({setShowPost, setCounter, userData}){
 				</div>
 
 				<div className="relative w-full flex flex-row gap-2 items-center p-2">
-					<div className="flex text-lg text-zinc-600 flex flex-row items-center gap-5">
+					<div className="text-lg text-zinc-600 flex flex-row items-center gap-5">
+						<div className="sm:flex flex-row gap-5 grid grid-cols-4">
 						<input ref={fileRef} type="file" 
 						accept="image/*"
 						className="hidden"
@@ -209,9 +210,9 @@ function Post({setShowPost, setCounter, userData}){
 						<FaUnderline onClick={() => setPost(post+" __underline__ ")} className="hover:text-zinc-800 cursor-pointer"/>
 						<FaCut onClick={() => setPost(post+"~strike~")} className="hover:text-zinc-800 cursor-pointer"/>
 						<FaCode onClick={() => setPost(post+"`code`")} className="hover:text-zinc-800 cursor-pointer"/>
+						</div>
 
-
-						<div className="sm:hidden flex flex-row gap-2 items-center text-sm">
+						<div className="sm:hidden flex sm:flex-row flex-col font-semibold gap-2 items-center text-sm">
 							<button className={`p-1 px-2 ${showPreview ? "bg-zinc-200" : "hover:bg-rose-700 bg-rose-600 text-rose-200"} rounded cursor-pointer`}
 								onClick={() => setShowPreview(false)}
 							>
@@ -224,7 +225,7 @@ function Post({setShowPost, setCounter, userData}){
 							</button>
 						</div>
 					</div>
-					<button className="text-sm font-semibold bg-rose-600 p-1 px-2 rounded-md text-white ml-auto cursor-pointer focus:bg-rose-700 hover:bg-rose-800"
+					<button className="mt-auto text-sm font-semibold bg-rose-600 p-1 px-2 rounded-md text-white ml-auto cursor-pointer focus:bg-rose-700 hover:bg-rose-800"
 						onClick={() => handlePost()}
 						>
 						{!loading ?

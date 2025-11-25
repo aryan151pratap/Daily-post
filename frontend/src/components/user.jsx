@@ -136,7 +136,7 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 			</div>
 
 			{edit && 
-				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xs">
+				<div className="fixed p-2 inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xs">
 					<EditProfile data={data} setData={setData} setEdit={setEdit}/>
 				</div>
 			}

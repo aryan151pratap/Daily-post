@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
 export default function EditProfile({ data, setData, setEdit }) {
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -46,17 +47,19 @@ export default function EditProfile({ data, setData, setEdit }) {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const res = await fetch(`${VITE_BACKEND}/edit/${data._id}`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(form)
-	});
-	const result = await res.json();
-	if(res.ok){
-		setData(result.user);
-		setEdit(false);
-	}
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form)
+    });
+    const result = await res.json();
+    if(res.ok){
+      setData(result.user);
+      setEdit(false);
+    }
+    setLoading(false);
   };
 
   return (
@@ -143,7 +146,11 @@ export default function EditProfile({ data, setData, setEdit }) {
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
         >
-          Save
+          {!loading ?
+          <p>Save</p>
+          :
+          <div className="p-2 border-3 rounded-full border-t-transparent animate-spin"></div>
+          }
         </button>
       </div>
     </form>
