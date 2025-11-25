@@ -8,12 +8,14 @@ const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 function CommentBox({details, setDetails, id, userData}) {
 	const [comment, setComment] = useState("");
 	const [showPicker, setShowPicker] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const handleEmojiClick = (emojiData) => {
 		setComment((prev) => prev + emojiData.emoji);
 	};
 
 	const handleSend = async function(){
+		setLoading(true);
 		if(!comment.trim()) return 0;
 		const data = {email: userData.email ,comment};
 
@@ -25,16 +27,21 @@ function CommentBox({details, setDetails, id, userData}) {
 
 		const result = await res.json();
 		if(res.ok){
-			console.log(result);
 			setComment("");
+			setDetails(prev => ({
+				...prev,
+				comment: [...prev.comment, {user: userData, comment}]
+			}));
 		}
-		setDetails(prev => ({
-			...prev,
-			comment: [...prev.comment, {user: userData, comment}]
-		}));
+		setLoading(false);
 	}
 
 	const handleDelete = async function(commentId){
+		const comments = details.comment.filter((i) => i._id !== commentId);
+		setDetails(prev => ({
+			...prev,
+			comment: comments
+		}));
 		try{
 			const res = await fetch(`${VITE_BACKEND}/deleteComment/${id}/${commentId}`, {
 				method: "GET"
@@ -48,6 +55,8 @@ function CommentBox({details, setDetails, id, userData}) {
 			}
 		} catch(err){
 			console.log(err);
+		} finally {
+			setLoading(false);
 		}
 	}
 
@@ -75,7 +84,7 @@ function CommentBox({details, setDetails, id, userData}) {
 						onClick={() => handleSend()}
 						className="p-2.5 bg-green-100 text-green-500 rounded cursor-pointer hover:bg-green-200 focus:bg-green-300"
 					>
-					<FaPaperPlane/>
+						{!loading ? <FaPaperPlane/> : <div className="p-1.5 border-2 border-t-transparent rounded-full animate-spin"></div>}
 					</button>
 				</div>
 				{showPicker && (
@@ -89,7 +98,7 @@ function CommentBox({details, setDetails, id, userData}) {
 				{details?.comment?.map((i, index) => (
 					<div key={index} className='flex flex-col gap-2 justify-center'>
 						<div className="w-fit flex flex-row gap-3 items-center cursor-pointer">
-							<img src={user} alt="" className='border border-zinc-400 w-8 h-8 objet-cover rounded-full'/>
+							<img src={i?.user?.image} alt="" className='border border-zinc-400 w-8 h-8 object-cover rounded-full'/>
 							<div className="hover:underline">
 								<p className="text-sm text-zinc-800 font-semibold">{i?.user?.username}</p>
 								<p className="text-xs text-zinc-500">{i?.user?.email}</p>
@@ -111,6 +120,9 @@ function CommentBox({details, setDetails, id, userData}) {
 						</div>
 					</div>
 				))}
+				{details.comment.length == 0 &&
+					<div className="px-2 w-full text-sm text-zinc-600">No comments ..</div>
+				}
 			</div>
 		</div>
 	);

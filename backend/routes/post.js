@@ -113,7 +113,7 @@ router.post('/comment/:id', async (req, res) => {
 				{ comments: { user: user._id, comment } }
 			}, 
 			{ new: true }
-		).populate("comments.user", "email");
+		);
 
 		res.status(200).json({
 			post
@@ -128,7 +128,7 @@ router.get('/getComment/:id', async (req, res) => {
 	try{
 		const {id} = req.params;
 		if(!id) return res.status(400).json({message: "post id not found!"});
-		const post = await Post.findById(id).populate("comments.user", "email username").select("comments");
+		const post = await Post.findById(id).populate("comments.user", "email username image").select("comments");
 		console.log("show");
 		if(!post) return res.status(400).json({message: "post not found!"});
 		return res.status(200).json({
