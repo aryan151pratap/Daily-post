@@ -39,7 +39,7 @@ const Login = function({setEnter, setLoading, setUserData}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const data = login ? { email, password } : { email, username, password };
     const res = await fetch(`${VITE_BACKEND}/${login ? "login" : "signup"}`, {
       method: "POST",
@@ -58,6 +58,7 @@ const Login = function({setEnter, setLoading, setUserData}) {
       }
       setMessage(result.message);
     }
+    setLoading(false);
   };
 
   return (
