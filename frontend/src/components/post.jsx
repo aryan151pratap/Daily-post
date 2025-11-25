@@ -15,6 +15,7 @@ function Post({setShowPost, setCounter, userData}){
 	const [showPreview, setShowPreview] = useState(false);
 	const [image, setImage] = useState([]);
 	const [time, setTime] = useState(new Date());
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const timer = setInterval(() => {
@@ -104,10 +105,11 @@ function Post({setShowPost, setCounter, userData}){
 	};
 
 	const handlePost = async function(){
+		setLoading(true);
 		const storedEmail = localStorage.getItem("daily-post-email");
 		if(!storedEmail) return;
 		console.log(image);
-		if(!image || !text) return;
+		if(!image || !preview) return;
 		const data = {
 			post: preview,
 			image
@@ -121,6 +123,7 @@ function Post({setShowPost, setCounter, userData}){
 			setShowPost(false);
 			setCounter((e) => e+1);
 		}
+		setLoading(false);
 	}
 
 	return(
@@ -223,8 +226,12 @@ function Post({setShowPost, setCounter, userData}){
 					</div>
 					<button className="text-sm font-semibold bg-rose-600 p-1 px-2 rounded-md text-white ml-auto cursor-pointer focus:bg-rose-700 hover:bg-rose-800"
 						onClick={() => handlePost()}
-					>
-						Post
+						>
+						{!loading ?
+						<p>Post</p>
+						:
+						<div className="p-2 border-3 rounded-full border-t-transparent animate-spin"></div>
+						}
 					</button>
 				</div>
 			</div>
