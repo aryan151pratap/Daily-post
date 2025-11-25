@@ -23,7 +23,6 @@ const Login = function({setEnter, setLoading, setUserData}) {
           if (res.ok) {
             setUserData(result.user);
             setEnter(true);
-            navigate("/home");
           }
         }
       } catch (err) {

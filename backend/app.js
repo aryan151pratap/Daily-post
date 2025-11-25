@@ -5,6 +5,8 @@ const connectDB = require("./db");
 
 const login = require("./routes/login");
 const post = require("./routes/post");
+const search = require("./routes/search");
+const user = require("./routes/user");
 
 const app = express();
 
@@ -20,5 +22,7 @@ app.get("/", (req, res) => {
 
 app.use("/", login);
 app.use("/", post);
+app.use("/", search);
+app.use("/", user);
 
 app.listen(3000, () => console.log("Server running on port 3000"));

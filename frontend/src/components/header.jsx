@@ -5,7 +5,7 @@ import user from '../images/image.png';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 
-const Header = function({select, setSelect}){
+const Header = function({select, setSelect, userData}){
 	const feature = [{name:"home", icon:<FaHome/>}, {name:"search", icon: <FaSearch/>}, {name:"user", icon: <FaUser/>}, {name:"notification", icon: <FaBell/>}];
 	const [image, setImage] = useState(null);
 	const [notify, setNotify] = useState(["connect"]);
@@ -17,7 +17,7 @@ const Header = function({select, setSelect}){
 					<div key={index} className="cursor-pointer"
 						onClick={() => setSelect(i)}
 					>
-						<Link to={`/${i?.name}`}>
+						<Link to={`/${i?.name == "user" ? `${i?.name}/${userData._id}`: i?.name}/`}>
 							<div className="relative">
 								{i?.name == "notification" && notify.length > 0 &&
 								<div className="absolute text-xs border border-white font-mono w-5 h-5 flex items-center justify-center bottom-2 left-2 bg-rose-500 hover:bg-rose-400 rounded-full">
@@ -32,8 +32,10 @@ const Header = function({select, setSelect}){
 			</div>
 			<div className="sm:px-4 md:px-10 p-2 flex border-l border-zinc-200 ml-auto">
 				<div className="flex flex-row text-sm gap-4 mr-auto ">
-					<img src={image ? image : user} alt="" className='w-10 h-10 objet-cover rounded-full'/>
-					<p className="py-2 font-semibold">Aryan Pratap</p>
+					<div className="w-10 h-10">
+						<img src={userData?.image ? userData?.image : user} alt="" className='h-full w-full object-cover rounded-full'/>
+					</div>
+					<p className="py-2 font-semibold">{userData?.username}</p>
 				</div>
 			</div>
 		</div>

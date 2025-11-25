@@ -1,10 +1,13 @@
 import { FaComment, FaPaperPlane, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import user from '../../images/image.png';
 import image from '../../images/image2.png';
+import { Link } from 'react-router-dom';
+
 
 import { useEffect, useState } from 'react';
 import CommentBox from './comment';
 import Frames from './frames';
+import FullFrame from './fullFrame';
 
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
@@ -14,6 +17,7 @@ const Media = function({data, userData}){
 	const [comment, setComment] = useState(false);
 	const [showMore, setShowMore] = useState(true);
 	const [likes, setLikes] = useState(0);
+	const [fullFrame, setfullFrame] = useState(false);
 
 	const handleDetailes = function(value){
 		if(value == "like"){
@@ -103,16 +107,19 @@ const Media = function({data, userData}){
 
 	return(
 		<div className="w-full h-fit flex justify-center">
-			<div className="lg:w-xl sm:w-100 w-full bg-white border border-zinc-200 rounded-md shadow-md flex flex-col overflow-hidden">
+			<div className="lg:w-xl sm:w-100 w-full bg-white border border-zinc-200 sm:rounded-md shadow-md flex flex-col overflow-hidden">
 				<div className="p-3">
+					<Link to={`/user/${data?.userId?._id}`}>
 					<div className="w-fit flex flex-row items-center gap-5 text-md cursor-pointer">
-						<img src={user} alt="" className='w-10 h-10 objet-cover rounded-full'/>
+						<div className='shrink-0 w-10 h-10'>
+							<img src={data?.userId?.image ? data?.userId?.image : user} alt="" className='w-full h-full object-cover rounded-full'/>
+						</div>
 						<div className="hover:underline">
 							<p>{data?.userId?.username}</p>
-							<p className='text-xs text-zinc-400'>{data?.userId?.email}</p>
-							<p className='text-xs text-zinc-400'>{data?.userId?.bio}</p>
+							<p className='text-xs text-zinc-400 line-clamp-1'>{data?.userId?.bio}</p>
 						</div>
 					</div>
+					</Link>
 				</div>
 
 				{/* <div className='w-full flex justify-center border-t border-zinc-200'>
@@ -130,7 +137,7 @@ const Media = function({data, userData}){
 				</button>
 
 				<div className=''>
-					<Frames image={data?.imageUrl ? data?.imageUrl : []}/>
+					<Frames setfullFrame={setfullFrame} image={data?.imageUrl ? data?.imageUrl : []}/>
 				</div>
 
 				<div className='flex gap-2 items-center justify-between text-zinc-600'>
@@ -174,6 +181,10 @@ const Media = function({data, userData}){
 
 				{comment &&
 					<CommentBox details={details} id={data._id} userData={userData} setDetails={setDetails}/>
+				}
+
+				{fullFrame &&
+					<FullFrame data={data} setfullFrame={setfullFrame} likes={likes}/>
 				}
 			</div>
 		</div>

@@ -104,7 +104,7 @@ function CommentBox({details, setDetails, id, userData}) {
 								<FaTrash className=""/>
 							</div>
 							:
-							<div className="p-2 text-rose-600 sm:text-rose-400 hover:text-rose-600 bg-rose-200 sm:bg-rose-50 hover:bg-rose-200 rounded-r-md cursor-pointer">
+							<div className="p-2 opacity-0">
 								<FaThumbsUp/>
 							</div>
 							}

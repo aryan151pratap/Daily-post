@@ -5,7 +5,7 @@ import image3 from '../../images/image3.png';
 import { useState } from "react";
 import { useEffect } from "react";
 
-const Frames = function({image}){
+const Frames = function({image, setfullFrame}){
 	const [images, setImages] = useState([]);
 	const [play, setPlay] = useState(false);
 	const [current, setCurrent] = useState(0);
@@ -39,11 +39,13 @@ const Frames = function({image}){
 	}, [play, images.length]);
 
 	return(
-		<div className="">
+		<div className="w-full">
 			<div className="h-full border-t border-b border-zinc-200">
 
 				{images.length > 1 ? 
-				<div className="relative min-h-55 flex items-center justify-center overflow-">
+				<div className="relative min-h-55 flex items-center justify-center overflow-"
+					onClick={() => setfullFrame(true)}
+				>
 					{images.map((img, index) => (
 						<img
 							key={index}
@@ -57,7 +59,9 @@ const Frames = function({image}){
 				</div>
 				:
 			
-				<div className="w-full h-full flex items-center justify-center">
+				<div className="w-full h-full flex items-center justify-center"
+					onClick={() => setfullFrame(true)}
+				>
 					<img
 						src={images[current]}
 						alt=""

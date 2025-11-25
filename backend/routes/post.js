@@ -6,18 +6,25 @@ const User = require('../models/user');
 router.get('/getPost/:email', async (req, res) => {
     try {
         const { email } = req.params;
-        console.log(email);
+		const skip = Number(req.query.skip);
+  		const limit = Number(req.query.limit);
 
 		if(!email) return res.status(500).json({message: "user  not found"});
 
 		const post = await Post.find()
-		.populate("userId", "username email").sort({ createdAt: -1 })
+		.sort({ createdAt: -1 })
+		.skip(skip)
+    	.limit(limit)
+		.populate("userId", "username image bio")
 		.populate("like unlike", "email")
 		;
 
+		const count = await Post.countDocuments();
+
 		if(!post) return res.status(500).json({message: "user  not found"});
         return res.status(200).json({
-			result: post
+			post,
+			hasMore: skip+limit < count
         });
     } catch (err) {
         return res.status(500).json({ error: err.message });
@@ -32,8 +39,6 @@ router.post('/savePost/:email', async (req, res) => {
 
 		const user = await User.findOne({email});
 		if(!user) return res.status(500).json({message: "user  not found"});
-
-		console.log(user);
 
 		const newPost = await Post.create({
 			caption: post,
@@ -96,7 +101,6 @@ router.post('/comment/:id', async (req, res) => {
 	try {
 		const {id} = req.params;
 		const {email, comment} = req.body;
-		console.log(comment);
 		if (!id) return res.status(400).json({ message: "Post ID missing" });
         if (!email) return res.status(400).json({ message: "User email missing" });
 
@@ -123,7 +127,6 @@ router.post('/comment/:id', async (req, res) => {
 router.get('/getComment/:id', async (req, res) => {
 	try{
 		const {id} = req.params;
-		console.log(id);
 		if(!id) return res.status(400).json({message: "post id not found!"});
 		const post = await Post.findById(id).populate("comments.user", "email username").select("comments");
 		console.log("show");

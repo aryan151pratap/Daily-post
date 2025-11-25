@@ -3,10 +3,11 @@ import user from '../images/image.png';
 import { useEffect, useRef, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 import Frames from "./home_component/frames";
+import { Link } from "react-router-dom";
 
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
-function Post({setShowPost, setCounter}){
+function Post({setShowPost, setCounter, userData}){
 	const fileRef = useRef(null);
 	const [post, setPost] = useState('');
 	const [preview, setPreview] = useState("");
@@ -106,6 +107,7 @@ function Post({setShowPost, setCounter}){
 		const storedEmail = localStorage.getItem("daily-post-email");
 		if(!storedEmail) return;
 		console.log(image);
+		if(!image || !text) return;
 		const data = {
 			post: preview,
 			image
@@ -124,13 +126,15 @@ function Post({setShowPost, setCounter}){
 	return(
 		<div className="fixed inset-0 z-50 sm:p-4 p-2 bg-black/50 text-black backdrop-blur-xs w-full h-full flex items-center justify-center">
 			<div className="md:w-4xl w-full h-[80%] flex flex-col bg-white rounded-md border border-zinc-200 p-2 overflow-hidden">
-				<div className="w-full flex flex-row items-center gap-2 p-2 font-semibold border-b border-zinc-200">
-					<img src={user} alt="" className='sm:w-15 sm:h-15 h-10 w-10 objet-cover rounded-full'/>
-					<div className="flex flex-col">
-						<p className="sm:text-lg text-md">Aryan Pratap</p>
-						<p className="sm:text-sm text-xs font-thin text-zinc-400 line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, totam.</p>
+				<div className="w-full flex flex-row items-center gap-2 p-2 border-b border-zinc-200">
+					<img src={userData?.image} alt="" className='sm:w-15 sm:h-15 h-10 w-10 object-cover rounded-full'/>
+					<Link to={`/user/${userData?._id}`}>
+					<div className="flex flex-col hover:underline cursor-pointer">
+						<p className="sm:text-lg text-md font-semibold">{userData?.username}</p>
+						<p className="sm:w-[70%] w-[80%] sm:text-sm text-xs text-zinc-600 line-clamp-1">{userData?.bio}</p>
 					</div>
-					<FaTimes className="h-6 w-6 p-1 text-sm text-rose-500 hover:bg-rose-200 rounded-md ml-auto cursor-pointer"
+					</Link>
+					<FaTimes className="shrink-0 h-6 w-6 p-1 text-sm text-rose-500 hover:bg-rose-200 rounded-md ml-auto cursor-pointer"
 					 onClick={() => setShowPost(false)}
 					/>
 				</div>
@@ -162,7 +166,7 @@ function Post({setShowPost, setCounter}){
 								<p className="w-full min-h-40 flex items-center justify-center font-serif italic text-zinc-400">Add Images ... </p>
 							</div>
 						}
-						
+
 						<div className="mt-auto">
 							{image?.length == 1 ?
 							<div className="border-t border-b border-zinc-200 flex justify-center bg-zinc-200 items-center">
