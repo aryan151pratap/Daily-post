@@ -82,7 +82,7 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 					<p className="text-lg font-semibold flex gap-2 items-center">{data?.username}<span className="text-sm text-zinc-700 font-normal">{data?.email}</span></p>
 					<p className="text-sm p-1">{data?.bio}</p>
 					<div className="w-full ml-auto mt-2 flex flex-row gap-2">
-						<div className="mr-auto text-sm px-2 p-1 bg-rose-600 text-white hover:bg-rose-700 rounded-md cursor-pointer"
+						<div className={`${userData?._id != id && "hidden"} mr-auto text-sm px-2 p-1 bg-rose-600 text-white hover:bg-rose-700 rounded-md cursor-pointer`}
 							onClick={() => handleLogout()}
 						>
 							Logout

@@ -25,7 +25,7 @@ const FullFrame = function({data, setfullFrame, likes}){
 						onClick={() => setfullFrame(false)}
 					/>
 				</div>
-				<div className="w-full h-full overflow-auto">
+				<div className="w-full h-full flex items-center overflow-auto mt-auto">
 					<Media data={data} />
 				</div>
 			</div>
