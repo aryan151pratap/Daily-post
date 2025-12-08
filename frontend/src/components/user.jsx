@@ -19,6 +19,7 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 	const [AddPost, setAddPost] = useState(false);
 	const [counter, setCounter] = useState(0);
 	const [loadPost, setLoadPost] = useState(0);
+	const [disabled, setDisabled] = useState(false);
 
 
 	useEffect(() => {
@@ -45,6 +46,7 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 			setCurrentPost((e) => e+1%postCount);
 			return;
 		};
+		setDisabled(true);
 		const res = await fetch(`${VITE_BACKEND}/postByIndex/${id}/${currentPost+1}`, {
 			method: "GET"
 		});
@@ -55,6 +57,7 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 			setPostCount(result.count);
 			setCurrentPost((e) => e+1%postCount);
 		}
+		setDisabled(false);
 	}
 
 	const handleLogout = function(){
@@ -113,8 +116,8 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 								<FaArrowLeft className="hover:text-zinc-800"/>	
 							</button>
 							<button
-								className={`px-2 p-1 ${currentPost == postCount-1 ? "bg-zinc-200 text-zinc-500 rounded-md cursor-not-allowed" : "cursor-pointer hover:text-zinc-800"}`}
-								disabled={currentPost == postCount-1}
+								className={`px-2 p-1 ${currentPost == postCount-1 || disabled ? "bg-zinc-200 text-zinc-500 rounded-md cursor-not-allowed" : "cursor-pointer hover:text-zinc-800"}`}
+								disabled={currentPost == postCount-1 || disabled}
 								onClick={() => getPost()}
 							>
 								<FaArrowRight className=""/>

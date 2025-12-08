@@ -16,7 +16,7 @@ import User from './components/user.jsx';
 function App() {
   const [select, setSelect] = useState({name:"home", icon:<FaHome/>});
   const [enter, setEnter] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   
 
