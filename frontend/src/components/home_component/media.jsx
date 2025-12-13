@@ -122,11 +122,8 @@ const Media = function({data, userData}){
 					</Link>
 				</div>
 
-				{/* <div className='w-full flex justify-center border-t border-zinc-200'>
-					<img src={image} alt="" className=''/>
-				</div> */}
-
 				<div className={`p-2 border-t border-zinc-100 ${showMore && "max-h-50 overflow-hidden"}`}>
+					<p className='mb-2 mt-1 px-2 font-semibold'>{data?.title}</p>
 					<pre className="font-sans text-sm text-wrap p-2" dangerouslySetInnerHTML={{ __html: data?.caption }} />
 				</div>
 

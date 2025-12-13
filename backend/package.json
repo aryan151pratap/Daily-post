@@ -1,9 +1,13 @@
 {
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@openrouter/sdk": "^0.2.9",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "mongoose": "^8.19.4"
+    "mongoose": "^8.19.4",
+    "node-fetch": "^3.3.2",
+    "openai": "^6.10.0"
   }
 }

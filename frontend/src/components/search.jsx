@@ -85,7 +85,7 @@ function Search({ userData }) {
 	}
 
 	return (
-		<div className="md:w-xl w-full h-full  p-2 sm:py-4 md:ml-0 sm:ml-4">
+		<div className="md:w-xl sm:w-xs w-full h-full  p-2 sm:py-4 md:ml-0 sm:ml-4">
 			<div className={`relative w-full h-full ${show && "bg-zinc"} bg-white rounded-md border border-zinc-200`}>
 
 				<div className="p-3 text-sm w-full flex flex-row gap-2">

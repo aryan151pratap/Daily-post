@@ -46,7 +46,7 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 			setCurrentPost((e) => e+1%postCount);
 			return;
 		};
-		setDisabled(true);
+		setDisabled(true);''
 		const res = await fetch(`${VITE_BACKEND}/postByIndex/${id}/${currentPost+1}`, {
 			method: "GET"
 		});

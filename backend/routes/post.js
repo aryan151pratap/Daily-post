@@ -1,31 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../models/post');
-const User = require('../models/user');
+const postService = require('../services/postService');
 
 router.get('/getPost/:email', async (req, res) => {
     try {
-        const { email } = req.params;
-		const skip = Number(req.query.skip);
-  		const limit = Number(req.query.limit);
+        const { skip = 0, limit = 3, search = "" } = req.query;
+        const { post, hasMore } = await postService.getPosts(skip, limit, search);
 
-		if(!email) return res.status(500).json({message: "user  not found"});
+        if (!post) return res.status(500).json({ message: "user not found" });
 
-		const post = await Post.find()
-		.sort({ createdAt: -1 })
-		.skip(skip)
-    	.limit(limit)
-		.populate("userId", "username image bio")
-		.populate("like unlike", "email")
-		;
+        return res.status(200).json({ post, hasMore });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
 
-		const count = await Post.countDocuments();
+router.get('/getPostById/:postId', async (req, res) => {
+    try {
+        const {postId} = req.params;
+        const post = await postService.getPostById(postId);
+        if (!post) return res.status(500).json({ message: "user not found" });
 
-		if(!post) return res.status(500).json({message: "user  not found"});
-        return res.status(200).json({
-			post,
-			hasMore: skip+limit < count
-        });
+        return res.status(200).json(post);
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
@@ -34,25 +30,12 @@ router.get('/getPost/:email', async (req, res) => {
 router.post('/savePost/:email', async (req, res) => {
     try {
         const { email } = req.params;
-		const { post , image } = req.body;
-        if(!email) return res.status(500).json({message: "user  not found"});
+        const { title, post, image } = req.body;
 
-		const user = await User.findOne({email});
-		if(!user) return res.status(500).json({message: "user  not found"});
+        const newPost = await postService.savePost(email, title, post, image);
+        console.log("post save");
 
-		const newPost = await Post.create({
-			caption: post,
-			imageUrl: image,
-			userId: user._id
-		})
-
-		console.log("post save");
-
-        return res.status(200).json({
-            result: "post sucessfully",
-			post: newPost
-        });
-
+        return res.status(200).json({ result: "post sucessfully", post: newPost });
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
@@ -62,98 +45,56 @@ router.post('/react/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { email, action } = req.body;
-		console.log(action);
-        if (!id) return res.status(400).json({ message: "Post ID missing" });
-        if (!email) return res.status(400).json({ message: "User email missing" });
 
-        const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ message: "User not found" });
-
-        let updateQuery = {};
-
-        if (action === "like") {
-            updateQuery = {
-                $addToSet: { like: user._id },
-                $pull: { unlike: user._id }
-            };
-        } else if (action === "unlike") {
-            updateQuery = {
-                $addToSet: { unlike: user._id },
-                $pull: { like: user._id }
-            };
-        } else if (action === "remove-like") {
-            updateQuery = { $pull: { like: user._id } };
-        } else if (action === "remove-unlike") {
-            updateQuery = { $pull: { unlike: user._id } };
-        }
-
-        const post = await Post.findByIdAndUpdate(id, updateQuery, { new: true })
-            .populate("like unlike", "email username");
-
+        const post = await postService.reactPost(id, email, action);
         return res.status(200).json({ post });
-
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
 });
 
 router.post('/comment/:id', async (req, res) => {
-	try {
-		const {id} = req.params;
-		const {email, comment} = req.body;
-		if (!id) return res.status(400).json({ message: "Post ID missing" });
-        if (!email) return res.status(400).json({ message: "User email missing" });
+    try {
+        const { id } = req.params;
+        const { email, comment } = req.body;
 
-        const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ message: "User not found" });
-
-		const post = await Post.findByIdAndUpdate(
-			id, 
-			{ $push: 
-				{ comments: { user: user._id, comment } }
-			}, 
-			{ new: true }
-		);
-
-		res.status(200).json({
-			post
-		});
-
-	} catch (err) {
+        const post = await postService.addComment(id, email, comment);
+        return res.status(200).json({ post });
+    } catch (err) {
         return res.status(500).json({ error: err.message });
     }
-})
+});
 
 router.get('/getComment/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const post = await postService.getComments(id);
+
+        if (!post) return res.status(400).json({ message: "post not found!" });
+        return res.status(200).json({ post });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/deleteComment/:id/:commentId', async (req, res) => {
+    try {
+        const { id, commentId } = req.params;
+        const post = await postService.deleteComment(id, commentId);
+        return res.status(200).json({ post });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/deletePost/:id', async (req, res) => {
 	try{
 		const {id} = req.params;
-		if(!id) return res.status(400).json({message: "post id not found!"});
-		const post = await Post.findById(id).populate("comments.user", "email username image").select("comments");
-		console.log("show");
-		if(!post) return res.status(400).json({message: "post not found!"});
-		return res.status(200).json({
-			post
-		});
+		const post = await postService.deletePost(id);
+		return res.status(200).json({ message: "post deleted sucessfully" });
 	} catch (err) {
         return res.status(500).json({ error: err.message });
     }
-})
-
-router.get('/deleteComment/:id/:commentId', async (req, res) => {
-	try{
-		const {id, commentId} = req.params;
-		if(!id || !commentId) return res.status(400).json({message: "post and comment id not found!"});
-		const post = await Post.findByIdAndUpdate(id,
-			{ $pull: 
-				{ comments: {_id: commentId}}
-			},
-			{ new: true }
-		)
-		console.log(post);
-		res.status(200).json({post});
-	} catch(err){
-		console.log(err);
-	}
-})
+});
 
 module.exports = router;

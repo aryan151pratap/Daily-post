@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import Post from "./post.jsx";
 import Media from "./home_component/media.jsx";
+import { FaSearch } from "react-icons/fa";
 
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
@@ -10,17 +11,21 @@ const Home = function ({ setLoading, userData }) {
 	const [skip, setSkip] = useState(0);
 	const [hasMore, setHasMore] = useState(true);
 	const [postLoading, setPostLoading] = useState(false);
+	const [search, setSearch] = useState("");
+	const [searchTrigger, setSearchTrigger] = useState(0);
+
 
 	const observerRef = useRef(null);
 
 	async function fetchPosts() {
 		const email = localStorage.getItem("daily-post-email");
+		console.log(hasMore);
 		if (!email || !hasMore) return;
-
 		if(skip == 0) setLoading(true);
 		else setPostLoading(true);
 
-		const res = await fetch(`${VITE_BACKEND}/getPost/${email}?skip=${skip}&limit=3`);
+		// console.log(search);
+		const res = await fetch(`${VITE_BACKEND}/getPost/${email}/?skip=${skip}&limit=3&search=${search}`);
 		const result = await res.json();
 		console.log(result);
 		if (result.post?.length > 0) {
@@ -37,7 +42,7 @@ const Home = function ({ setLoading, userData }) {
 
 	useEffect(() => {
 		fetchPosts();
-	}, []);
+	}, [searchTrigger]);
 
 	useEffect(() => {
 		if (observerRef.current) observerRef.current.disconnect();
@@ -53,8 +58,15 @@ const Home = function ({ setLoading, userData }) {
 
 	}, [data]);
 
+	const handleSearch = function(){
+		setData([]);
+		setSkip(0);
+		setHasMore(true);
+		setSearchTrigger(prev => prev + 1);
+	}
+
 	return (
-		<div className="sm:w-fit w-full flex flex-col gap-4 sm:p-4 p-2">
+		<div className="sm:w-fit w-full flex flex-col gap-2 sm:p-4 p-2">
 
 			{post && (
 				<Post setShowPost={setPost} setCounter={() => {}} userData={userData} />
@@ -67,6 +79,15 @@ const Home = function ({ setLoading, userData }) {
 					onClick={() => setPost(true)}
 				>
 					Post
+				</button>
+			</div>
+
+			<div className="mb-2 flex flex-row items-center px-2 bg-white rounded border border-zinc-200 shadow">
+				<input type="text" value={search} onChange={(e) => setSearch(e.target.value)}className="w-full outline-none p-2" placeholder="Enter title to search the post ..."/>
+				<button className="text-sm p-2 text-white rounded bg-rose-500 cursor-pointer hover:bg-rose-600"
+					onClick={handleSearch}
+				>
+					<FaSearch/>
 				</button>
 			</div>
 

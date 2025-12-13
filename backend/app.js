@@ -8,6 +8,8 @@ const post = require("./routes/post");
 const search = require("./routes/search");
 const user = require("./routes/user");
 
+const chat = require("./ai_agent/text");
+
 const app = express();
 
 app.use(cors());
@@ -24,5 +26,8 @@ app.use("/", login);
 app.use("/", post);
 app.use("/", search);
 app.use("/", user);
+
+
+app.use("/agent", chat);
 
 app.listen(3000, () => console.log("Server running on port 3000"));

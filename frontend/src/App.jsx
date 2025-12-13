@@ -3,14 +3,14 @@ import Home from './components/home'
 import Header from './components/header'
 import { FaHome } from 'react-icons/fa'
 import Message from './components/home_component/message'
-import News from './components/home_component/news'
-import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import Search from './components/search.jsx'
 import Profile from './components/home_component/profile.jsx'
 import Login from './components/login/login.jsx'
 import Loading from './components/loading.jsx'
 import User from './components/user.jsx';
+import Agent from './components/ai_agent/agent.jsx'
+import './app.css';
 
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
           </div>
         }
 
-        <div className='relative flex w-full mx-auto sm:flex-row justify-center'>
+        <div className='flex w-full mx-auto sm:flex-row justify-center'>
 
           {enter && userData &&
           <div className='sticky top-14 hidden md:flex flex-col h-fit'>
@@ -41,7 +41,8 @@ function App() {
           </div>
           }
 
-          <Routes>
+          <div className=''>
+            <Routes>
             {enter && userData ?
               <>
                 <Route path="/home" element={<Home setLoading={setLoading} userData={userData}/>} />
@@ -54,11 +55,12 @@ function App() {
               :
               <Route path='*' element={<Login setEnter={setEnter} setLoading={setLoading} setUserData={setUserData}/>}/>
             }
-          </Routes>
+            </Routes>
+          </div>
 
           {enter && userData &&
-          <div className='sticky top-14 inset-0 hidden sm:flex flex-col md:w-sm w-full h-full'>
-            <News/>
+          <div className='sticky top-14 inset-0 hidden sm:flex flex-col md:min-w-sm max-w-xs min-w-xs h-[655px]'>
+            <Agent userData={userData}/>
           </div>
           }
 

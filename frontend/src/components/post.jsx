@@ -7,8 +7,9 @@ import { Link } from "react-router-dom";
 
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
-function Post({setShowPost, setCounter, userData}){
+function Post({setShowPost, setCounter, userData, postData}){
 	const fileRef = useRef(null);
+	const [title, setTitle] = useState("");
 	const [post, setPost] = useState('');
 	const [preview, setPreview] = useState("");
 	const [showPicker, setShowPicker] = useState(false);
@@ -24,6 +25,15 @@ function Post({setShowPost, setCounter, userData}){
 
 		return () => clearInterval(timer);
 	}, []);
+
+	useEffect(() => {
+		const edit = function(){
+			if(!postData) return;
+			if(postData?.title) setTitle(postData.title);
+			if(postData?.content) setPost(postData.content);
+		}
+		edit();
+	},[])
 
 	const urlRegex = /(https?:\/\/[^\s"']+)/g;
 	const boldRegex = /\*(.+?)\*/g;
@@ -111,6 +121,7 @@ function Post({setShowPost, setCounter, userData}){
 		console.log(image);
 		if(!image || !preview) return;
 		const data = {
+			title,
 			post: preview,
 			image
 		}
@@ -144,12 +155,18 @@ function Post({setShowPost, setCounter, userData}){
 
 				<div className={`w-full h-full grid sm:grid-cols-2 gap-2 p-2 overflow-auto`}>
 
-					<textarea name="" id="" 
-					value={post}
-					onChange={(e) => setPost(e.target.value)}
-					placeholder="Post what you want ..."
-					className={`${showPreview ? "sm:flex hidden" : ""} w-full h-full border border-rose-200 focus:border-rose-400 outline-none p-2 text-md text-rose-700 w-full rounded-md bg-rose-50`}>
-					</textarea>
+					<div className="flex flex-col gap-1">
+						<input type="text" value={title} className="text-rose-700 h-fit w-full bg-rose-50 text-sm px-2 p-1 outline-none border border-rose-200 focus:border-rose-400 rounded-md"
+							placeholder="Title"
+							onChange={(e) => setTitle(e.target.value)}
+						/>
+						<textarea name="" id="" 
+						value={post}
+						onChange={(e) => setPost(e.target.value)}
+						placeholder="Post what you want ..."
+						className={`${showPreview ? "sm:flex hidden" : ""} w-full h-full border border-rose-200 focus:border-rose-400 outline-none p-2 text-md text-rose-700 w-full rounded-md bg-rose-50`}>
+						</textarea>
+					</div>
 
 					<div className={`${!showPreview ? "sm:flex hidden" : ""} h-full flex flex-col bg-white border border-zinc-200 rounded-md overflow-auto`}>
 						<p className="sticky top-0 flex flex-row items-center gap-2 bg-white p-1 font-sans text-zinc-500 text-sm border-b border-zinc-200">
@@ -157,7 +174,11 @@ function Post({setShowPost, setCounter, userData}){
 							Review
 						</p>
 
-
+						{title &&
+						<div className="p-2 font-semibold">
+							<p className="w-fit p-1">{title}</p>
+						</div>
+						}
 						{preview &&
 						<div className="p-2">
 							<pre className="font-sans text-sm text-wrap" dangerouslySetInnerHTML={{ __html: preview }} />
