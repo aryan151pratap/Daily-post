@@ -51,7 +51,7 @@ export default function Agent({userData}) {
 					setSuggests(result.suggests);
 					setMessages([{id: Date.now(), role: "bot", text: result.reply}]);
 				} else {
-					setReload(e => e+1);
+					// setReload(e => e+1);
 				}
 			} catch(err){
 				console.log(err);
