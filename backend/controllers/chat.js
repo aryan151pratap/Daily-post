@@ -57,18 +57,15 @@ export const simpleChat = async (userId, text) => {
 			if (!match) throw new Error("No JSON found");
 			return JSON.parse(match[0]);
 		}
-		console.log(raw);
-		const result = extractJSON(raw);
+		raw = raw.replace(/```json|```/g, "").trim();
+		raw = raw.replace(/^\s*```[\s\S]*?```$/gm, "").trim();
+		let result;
 		console.log(result);
-
-		// raw = raw.replace(/```json|```/g, "").trim();
-		// raw = raw.replace(/^\s*```[\s\S]*?```$/gm, "").trim();
-		// let result;
-		// try {
-		// 	result = JSON.parse(raw);
-		// } catch {
-		// 	result = { reply: raw, remember: 0 };
-		// }
+		try {
+			result = JSON.parse(raw);
+		} catch {
+			result = extractJSON(raw);
+		}
 		if (result.memory == 1) {
 			memory.username = result.username;
 			memory.email = result.email;
