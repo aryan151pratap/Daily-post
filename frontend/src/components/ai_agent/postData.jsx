@@ -7,6 +7,7 @@ import { useEffect } from "react";
 const PostData = function({data, disabled, userData}){
 	const [showEdit, setShowEdit] = useState(false);
 	const [postData, setPostData] = useState(null);
+	console.log(data);
 
 	useEffect(() => {
 		const edit = function(){

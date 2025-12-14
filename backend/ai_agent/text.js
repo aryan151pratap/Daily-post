@@ -10,7 +10,7 @@ router.post("/chat/:id", async (req, res) => {
   const result = await simpleChat(id, message);
   console.log(result);
 
-  if(result.action != null && result?.action.action && result?.action.args){
+  if(result.action != null && result?.action.action ){
   
 
     if(result.action.action == "createPost") return res.json({ action: result.action.action, reply: result.reply, suggests: result.suggestions, post: result.post });

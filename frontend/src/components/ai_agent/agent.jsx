@@ -129,7 +129,7 @@ export default function Agent({userData}) {
 			}
 			if(result?.action == "createPost"){
 				setData(e => [...e, result]);
-				// console.log(result);
+				console.log("result", result);
 			} 
 			setLastMsg(result.reply);
 			setSuggests(result.suggests);
