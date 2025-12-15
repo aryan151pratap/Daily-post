@@ -25,6 +25,8 @@ const Frames = function({image, setfullFrame}){
 	useEffect(() => {
 		if(image.length > 0){
 			setImages(image);
+		}else {
+			setImages([]);
 		}
 	}, [image])
 
@@ -58,7 +60,7 @@ const Frames = function({image, setfullFrame}){
 					))}				
 				</div>
 				:
-			
+				images.length == 1 &&
 				<div className="w-full h-full flex items-center justify-center"
 					onClick={() => setfullFrame(true)}
 				>

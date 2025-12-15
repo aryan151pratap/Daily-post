@@ -149,8 +149,8 @@ export default function Agent({userData}) {
 
 
 	return (
-		<div className="md:px-4 py-4 w-full h-full flex flex-col overflow-hidden">
-			<div className="bg-white h-full flex flex-col rounded-md overflow-hidden mr-4">
+		<div className="md:px-4 sm:py-4 w-full h-full flex flex-col overflow-hidden">
+			<div className="bg-white h-full flex flex-col rounded-md overflow-hidden sm:mr-4">
 				<header className="px-4 py-3 bg-gradient-to-r from-rose-400 to-rose-500 text-white flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg font-semibold">AI</div>
@@ -219,7 +219,7 @@ export default function Agent({userData}) {
 					className="shrink-0 p-2 bg-rose-50 flex items-center gap-3"
 				>	
 					<div
-						className={`${disabled && "cursor-not-allowed"} p-2 w-full bg-rose-200 flex flex-col gap-2 rounded-2xl border-1 border-rose-300 overflow-hidden`}
+						className={`${disabled && "cursor-not-allowed"} p-2 w-full bg-rose-200 flex flex-col gap-2 rounded-2xl border-1 border-rose-300 overflow-hidden focus-within:border-rose-500`}
 					>
 						<textarea
 							disabled={disabled}

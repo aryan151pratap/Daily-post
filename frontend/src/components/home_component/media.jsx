@@ -133,9 +133,11 @@ const Media = function({data, userData}){
 					...{showMore ? "more" : "less"}
 				</button>
 
+				{data?.imageUrl.length > 0 &&
 				<div className=''>
 					<Frames setfullFrame={setfullFrame} image={data?.imageUrl ? data?.imageUrl : []}/>
 				</div>
+				}
 
 				<div className='flex gap-2 items-center justify-between text-zinc-600'>
 					{likes > 0 &&

@@ -18,6 +18,7 @@ function App() {
   const [enter, setEnter] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [agent, setAgent] = useState(false);
   
 
   return (
@@ -41,7 +42,7 @@ function App() {
           </div>
           }
 
-          <div className=''>
+          <div className='mb-12'>
             <Routes>
             {enter && userData ?
               <>
@@ -58,11 +59,24 @@ function App() {
             </Routes>
           </div>
 
+          <div className={`${!agent ? "fixed inset-0 bg-black/20 sm:bg-black/0 w-full h-screen z-20 sm:relative sm:w-fit sm:h-fit" : ""}`}>
+          </div>
+          
           {enter && userData &&
-          <div className='sticky top-14 inset-0 hidden sm:flex flex-col md:min-w-sm max-w-xs min-w-xs h-[655px]'>
+          <div 
+            className={`${agent ? "hidden" : "fixed z-30 top-15 right-10 h-[600px]"} border border-rose-200 focus-within:border-rose-300 sm:border-0 rounded-md 
+            sm:sticky sm:top-14 sm:inset-0 sm:flex flex-col md:min-w-sm max-w-xs min-w-xs sm:h-[655px]`}>
             <Agent userData={userData}/>
           </div>
           }
+          <div className='h-8 w-fit sm:hidden flex items-center justify-center fixed bottom-4 right-8 z-30 bg-rose-500 p-2 rounded-md cursor-pointer group'
+            onClick={() => setAgent(e => !e)}
+          >
+            <p className='text-xs text-white flex flex-col justify-center p-0 opacity-0 w-0 group-hover:px-2 group-hover:w-full group-hover:opacity-100 transition-all duration-400'>
+              <span>Agent</span>
+            </p>
+            <p className='w-6 h-5 p-3 text-md font-bold text-rose-100 bg-rose-200/30 flex items-center justify-center rounded-md'>AI</p>
+          </div>
 
         </div>
       </div>
