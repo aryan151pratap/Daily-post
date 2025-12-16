@@ -5,7 +5,7 @@ import EmojiPicker from "emoji-picker-react";
 
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
-function CommentBox({details, setDetails, id, userData}) {
+function CommentBox({details, setDetails, id, userData, commentLoading}) {
 	const [comment, setComment] = useState("");
 	const [showPicker, setShowPicker] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -94,6 +94,13 @@ function CommentBox({details, setDetails, id, userData}) {
 				)}
 			</div>
 
+			{commentLoading && details.comment.length == 0 ?
+			<div className="mt-2 w-full flex items-center justify-center gap-2">
+				<div className="p-3.5 border-2 rounded-full border-t-transparent animate-spin">
+				</div>
+				<p>loading ...</p>
+			</div>
+			:
 			<div className='py-2 flex flex-col gap-5'>
 				{details?.comment?.map((i, index) => (
 					<div key={index} className='flex flex-col gap-2 justify-center'>
@@ -120,10 +127,12 @@ function CommentBox({details, setDetails, id, userData}) {
 						</div>
 					</div>
 				))}
-				{details.comment.length == 0 &&
+
+				{!commentLoading && details.comment.length == 0 &&
 					<div className="px-2 w-full text-sm text-zinc-600">No comments ..</div>
 				}
 			</div>
+			}
 		</div>
 	);
 }

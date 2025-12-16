@@ -60,7 +60,7 @@ export const simpleChat = async (userId, text) => {
 		raw = raw.replace(/```json|```/g, "").trim();
 		raw = raw.replace(/^\s*```[\s\S]*?```$/gm, "").trim();
 		let result;
-		console.log(result);
+		
 		try {
 			result = JSON.parse(raw);
 		} catch {

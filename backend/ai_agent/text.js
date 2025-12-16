@@ -12,7 +12,6 @@ router.post("/chat/:id", async (req, res) => {
 
   if(result.action != null && result?.action.action ){
   
-
     if(result.action.action == "createPost") return res.json({ action: result.action.action, reply: result.reply, suggests: result.suggestions, post: result.post });
 
     const actionResult = await runAction(result, id);
@@ -55,8 +54,9 @@ router.post("/getAgent/:id", async (req, res) => {
   `;
   const result = await simpleChat(id, prompt);
   console.log(result);
-  if(result?.memory !== 1) return res.status(400).json({ memory: false });
-  res.json({ reply: result.reply, suggests: result.suggestions });
+  if(!result.memory) return res.json({ reply: "Error Occur\n\ntry another day."});
+  if(result?.memory !== 1) return res.status(400).json({ reply: result.reply });
+  res.json({ reply: result.reply, suggests: result.suggestions, memory: result?.memory === 1 ? true : false });
 });
 
 module.exports = router;

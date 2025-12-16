@@ -18,6 +18,7 @@ const Media = function({data, userData}){
 	const [showMore, setShowMore] = useState(true);
 	const [likes, setLikes] = useState(0);
 	const [fullFrame, setfullFrame] = useState(false);
+	const [commentLoading, setCommentLoading] = useState(false);
 
 	const handleDetailes = function(value){
 		if(value == "like"){
@@ -79,7 +80,8 @@ const Media = function({data, userData}){
 
 	useEffect(() => {
 		const getComment = async function(){
-			if(comment){
+			if(comment && details?.comment?.length > 0){
+				setCommentLoading(true);
 				try{
 					const res = await fetch(`${VITE_BACKEND}/getComment/${data?._id}`, {
 						method: "GET",
@@ -95,6 +97,8 @@ const Media = function({data, userData}){
 					}
 				} catch (err){
 					console.log(err);
+				} finally{
+					setCommentLoading(false);
 				}
 			}
 		}
@@ -179,7 +183,7 @@ const Media = function({data, userData}){
 				</div>
 
 				{comment &&
-					<CommentBox details={details} id={data._id} userData={userData} setDetails={setDetails}/>
+					<CommentBox details={details} id={data._id} userData={userData} setDetails={setDetails} commentLoading={commentLoading}/>
 				}
 
 				{fullFrame &&
