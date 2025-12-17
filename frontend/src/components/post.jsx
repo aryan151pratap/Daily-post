@@ -197,7 +197,7 @@ function Post({setShowPost, setCounter, userData, postData}){
 								<img src={image[0]} alt="" />
 							</div>
 							:
-							<Frames image={image}/>
+							<Frames image={image} imageCount={image.length}/>
 							}
 						</div>
 						<div className="w-full flex flex-row justify-between gap-1 text-xs w-fit font-semibold">

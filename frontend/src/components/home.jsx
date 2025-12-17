@@ -96,7 +96,7 @@ const Home = function ({ setLoading, userData }) {
 					key={index}
 					className={index === data.length - 1 ? "watch-item" : ""}
 				>
-					<Media data={postData} userData={userData} />
+					<Media postData={postData} userData={userData} />
 				</div>
 			))}
 			{postLoading &&

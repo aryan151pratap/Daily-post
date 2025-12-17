@@ -1,4 +1,4 @@
-import { FaArrowLeft, FaArrowRight, FaEdit, FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaEdit, FaTrash, FaUser } from "react-icons/fa";
 import user from "../images/image.png";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -33,6 +33,8 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 				setData(result.user);
 				setPost(result.post);
 				setPostCount(result.count);
+				setCurrentPost(0);
+				setLoadPost(0);
 			}
 			setLoading(false);
 		}
@@ -46,7 +48,7 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 			setCurrentPost((e) => e+1%postCount);
 			return;
 		};
-		setDisabled(true);''
+		setDisabled(true);
 		const res = await fetch(`${VITE_BACKEND}/postByIndex/${id}/${currentPost+1}`, {
 			method: "GET"
 		});
@@ -67,6 +69,26 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 		setEnter(false);
 		navigate("/");
 	}
+
+	// const handleDelete = async function(id){
+	// 	console.log(id);
+	// 	const res = await fetch(`${VITE_BACKEND}/deletePost/${id}`, {
+	// 		method: "GET"
+	// 	});
+	// 	const result = await res.json();
+	// 	if(res.ok){
+	// 		setPost(e => e.filter((i) => i._id != id))
+	// 		setPostCount(e => e==0 ? 0 : e-1);
+	// 		setLoadPost(e => e==0 ? 0 : e-1);
+	// 		setCurrentPost(e => e==0 ? 0 : e-1);
+	// 		if(currentPost == 0){
+	// 			getPost();
+	// 			setLoadPost(e => e==0 ? 0 : e-2);
+	// 			setCurrentPost(e => e==0 ? 0 : e-1);
+	// 		}
+	// 	}
+	// }
+
 	return(
 		<div className="lg:w-xl w-full sm:p-4 h-full">
 			<div className="min-h-40 bg-white border border-zinc-200 sm:rounded-md shadow-sm">
@@ -122,14 +144,19 @@ const User = function({setLoading, userData, setSelect, setEnter}){
 							>
 								<FaArrowRight className=""/>
 							</button>
+							{/* <button className="bg-red-200 p-1 rounded cursor-pointer"
+								onClick={() => handleDelete(post[currentPost]._id)}
+							>
+								<FaTrash className="text-red-600 hover:text-red-800"/>
+							</button> */}
 						</div>
 					</div>
 					}
 
 					{postCount > 0 && currentPost <= post?.length-1 &&
-						<Media data={{...post[currentPost], userId: data}} userData={userData}/>
+						<Media postData={{...post[currentPost], userId: data}} userData={userData}/>
 					}
-					{postCount > 0 && currentPost > post?.length-1 &&
+					{postCount > 0 && currentPost > loadPost &&
 						<div className="h-50 w-full flex gap-2 items-center justify-center">
 							<div className="p-4 border-2 rounded-full border-t-transparent border-b-transparent animate-spin"></div>
 							<p className="font-semibold">loading...</p>

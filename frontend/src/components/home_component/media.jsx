@@ -11,7 +11,7 @@ import FullFrame from './fullFrame';
 
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
-const Media = function({data, userData}){
+const Media = function({postData, userData}){
 	const storedEmail = localStorage.getItem("daily-post-email");
 	const [details, setDetails] = useState({like:false, unlike:false, comment: []});
 	const [comment, setComment] = useState(false);
@@ -19,6 +19,12 @@ const Media = function({data, userData}){
 	const [likes, setLikes] = useState(0);
 	const [fullFrame, setfullFrame] = useState(false);
 	const [commentLoading, setCommentLoading] = useState(false);
+	const [data, setData] = useState([]);
+
+	useEffect(() => {
+		if(!postData) return;
+		setData(postData);
+	}, [postData])
 
 	const handleDetailes = function(value){
 		if(value == "like"){
@@ -137,9 +143,9 @@ const Media = function({data, userData}){
 					...{showMore ? "more" : "less"}
 				</button>
 
-				{data?.imageUrl.length > 0 &&
+				{data?.imageUrl?.length > 0 &&
 				<div className=''>
-					<Frames setfullFrame={setfullFrame} image={data?.imageUrl ? data?.imageUrl : []}/>
+					<Frames setfullFrame={setfullFrame} image={data?.imageUrl ? data?.imageUrl : []} imageCount={data?.imageCount} postId={data?._id}/>
 				</div>
 				}
 
@@ -150,7 +156,7 @@ const Media = function({data, userData}){
 						<p className='text-sm'>{likes}</p>
 					</div>
 					}
-					{data?.comments.length > 0 &&
+					{data?.comments?.length > 0 &&
 					<div className='p-1 px-2 flex gap-2 text-sm items-center'>
 						<p>{data?.comments.length}</p>
 						<p className=''>comments</p>

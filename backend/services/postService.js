@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Post = require("../models/post");
 const User = require("../models/user");
 
@@ -6,7 +7,9 @@ async function getPosts(skip = 0, limit = 10, search) {
     ? { title: { $regex: search, $options: "i" } }
     : {};
 
-    const post = await Post.find(query)
+    const post = await Post.find(query, {
+        imageUrl: {$slice: 1}
+    })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
@@ -14,6 +17,26 @@ async function getPosts(skip = 0, limit = 10, search) {
         .populate("like unlike", "email");
     const count = await Post.countDocuments(query);
     return { post, hasMore: skip + limit < count };
+}
+
+async function getPostImage(postId, index) {
+    if (!postId || index === undefined) return { message: "no postId or index"};
+    index = Number(index);
+
+    const result = await Post.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(postId) } },
+        {
+            $project: {
+                image: { $arrayElemAt: ["$imageUrl", index] }
+            }
+        }
+    ]);
+
+    if (!result.length || !result[0].image) {
+        return { message: "image not found" };
+    }
+
+    return { image: result[0].image };
 }
 
 async function getPostById(postId){
@@ -30,6 +53,7 @@ async function savePost(email, title, caption, images) {
 		title,
         caption,
         imageUrl: images || [],
+        imageCount: images.length,
         userId: user._id
     });
     return newPost;
@@ -115,5 +139,6 @@ module.exports = {
     deleteAllPost,
 	deletePost,
     editPost,
-    getPostById
+    getPostById,
+    getPostImage
 };

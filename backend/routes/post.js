@@ -7,7 +7,7 @@ router.get('/getPost/:email', async (req, res) => {
         const { skip = 0, limit = 3, search = "" } = req.query;
         const { post, hasMore } = await postService.getPosts(skip, limit, search);
 
-        if (!post) return res.status(500).json({ message: "user not found" });
+        if (!post) return res.status(500).json({ message: "post not found" });
 
         return res.status(200).json({ post, hasMore });
     } catch (err) {
@@ -19,6 +19,18 @@ router.get('/getPostById/:postId', async (req, res) => {
     try {
         const {postId} = req.params;
         const post = await postService.getPostById(postId);
+        if (!post) return res.status(500).json({ message: "user not found" });
+
+        return res.status(200).json(post);
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/getPostImage/:postId/:index', async (req, res) => {
+    try {
+        const {postId, index} = req.params;
+        const post = await postService.getPostImage(postId, index);
         if (!post) return res.status(500).json({ message: "user not found" });
 
         return res.status(200).json(post);
