@@ -7,7 +7,7 @@ import { useEffect } from "react";
 const FullFrame = function({data, setfullFrame, likes, children }){
 	return(
 		<div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-[1px] p-2 flex items-center justify-center">
-			<div className="relative h-[700px] p-2 bg-white flex flex-col rounded-md overflow-auto">
+			<div className="relative h-[700px] p-2 bg-white flex flex-col rounded-md">
 				<div className="p-2">
 					<Link to={`/user/${data?.userId?._id}`}>
 					<div className="w-fit flex flex-row items-center gap-5 text-md cursor-pointer">
@@ -26,10 +26,12 @@ const FullFrame = function({data, setfullFrame, likes, children }){
 						onClick={() => setfullFrame(false)}
 					/>
 				</div>
-				<div className="w-full h-full flex items-center overflow-auto mt-auto">
+				<div className="w-full h-full overflow-auto">
 					<Media postData={data} showFrame={true}/>
 				</div>
-				{children}
+				<div className="mt-auto">
+					{children}
+				</div>
 			</div>
 		</div>
 	)
