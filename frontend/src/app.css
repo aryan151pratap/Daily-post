@@ -35,5 +35,5 @@
 /* Firefox */
 .custom-scroll {
   scrollbar-width: thin; /* auto | thin | none */
-  scrollbar-color: #F43F5E #FCE7F3; /* thumb color then track color */
+  scrollbar-color: #fb91a3 #FCE7F3; /* thumb color then track color */
 }

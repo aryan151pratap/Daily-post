@@ -11,7 +11,7 @@ import FullFrame from './fullFrame';
 
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
-const Media = function({postData, userData}){
+const Media = function({postData, userData, showFrame=false}){
 	const storedEmail = localStorage.getItem("daily-post-email");
 	const [details, setDetails] = useState({like:false, unlike:false, comment: []});
 	const [comment, setComment] = useState(false);
@@ -86,7 +86,7 @@ const Media = function({postData, userData}){
 
 	useEffect(() => {
 		const getComment = async function(){
-			if(comment && details?.comment?.length > 0){
+			if(comment && details?.comment?.length >= 0){
 				setCommentLoading(true);
 				try{
 					const res = await fetch(`${VITE_BACKEND}/getComment/${data?._id}`, {
@@ -145,7 +145,7 @@ const Media = function({postData, userData}){
 
 				{data?.imageUrl?.length > 0 &&
 				<div className=''>
-					<Frames setfullFrame={setfullFrame} image={data?.imageUrl ? data?.imageUrl : []} imageCount={data?.imageCount} postId={data?._id}/>
+					<Frames setfullFrame={setfullFrame} fullFrame={showFrame} image={data?.imageUrl ? data?.imageUrl : []} imageCount={data?.imageCount} postId={data?._id}/>
 				</div>
 				}
 
@@ -164,6 +164,7 @@ const Media = function({postData, userData}){
 					}
 				</div>
 
+				{!showFrame &&
 				<div className='p-2 w-full flex items-center justify-center w-full border-t border-zinc-200'>
 					<div className='px-2 text-sm text-zinc-700 w-full flex flex-row justify-between'>
 						
@@ -187,14 +188,43 @@ const Media = function({postData, userData}){
 						</p>
 					</div>
 				</div>
+				}
 
 				{comment &&
 					<CommentBox details={details} id={data._id} userData={userData} setDetails={setDetails} commentLoading={commentLoading}/>
 				}
 
 				{fullFrame &&
-					<FullFrame data={data} setfullFrame={setfullFrame} likes={likes}/>
+					<FullFrame data={data} setfullFrame={setfullFrame} likes={likes}>
+						<div className='p-2 w-full flex items-center justify-center w-full border-t border-zinc-200'>
+							<div className='px-2 text-sm text-zinc-700 w-full flex flex-row justify-between'>
+								
+								<p className={`flex gap-1 items-center cursor-pointer ${details.like ? "bg-rose-200 text-rose-600" : "hover:bg-zinc-200"} p-1 rounded-md`}
+									onClick={() => handleDetailes("like")}
+								><FaThumbsUp className={`h-6 w-6 p-1 ${details.like ? "text-rose-500 bg-rose-300" : "text-zinc-400"} cursor-pointer rounded-sm`}	
+								/>like</p>
+								
+								<p className={`flex gap-1 items-center cursor-pointer ${details.unlike ? "bg-green-200 text-green-600" : "hover:bg-zinc-200"} p-1 rounded-md`}
+									onClick={() => handleDetailes("unlike")}
+								><FaThumbsDown className={`h-6 w-6 p-1 ${details.unlike ? "text-green-500 bg-green-300" : "text-zinc-400"} cursor-pointer rounded-sm`}
+								/>Unlike</p>
+
+								<p className={`flex gap-1 items-center cursor-pointer ${comment ? "bg-zinc-200" : "hover:bg-zinc-200"} p-1 rounded-md`}
+									onClick={() => handleComment()}
+								><FaComment className={`h-6 w-6 p-1 ${comment ? "text-zinc-500 bg-zinc-300" : "text-zinc-400"} cursor-pointer rounded-sm`}
+								/>comments</p>
+
+								<p className='flex gap-1 items-center cursor-pointer hover:bg-zinc-200 p-1 rounded-md'><FaPaperPlane className='h-6 w-6 p-1 text-zinc-400 cursor-pointer'/>
+									send
+								</p>
+							</div>
+						</div>
+						{comment &&
+							<CommentBox details={details} id={data._id} userData={userData} setDetails={setDetails} commentLoading={commentLoading}/>
+						}
+					</FullFrame>
 				}
+
 			</div>
 		</div>
 	)

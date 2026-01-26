@@ -1,4 +1,4 @@
-import {OpenRouter} from '@openrouter/sdk';
+import { OpenRouter } from '@openrouter/sdk';
 import { systemPrompt } from './promt.js';
 
 const openRouter = new OpenRouter({

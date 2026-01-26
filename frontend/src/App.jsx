@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Home from './components/home'
 import Header from './components/header'
-import { FaHome } from 'react-icons/fa'
+import { FaBell, FaHome } from 'react-icons/fa'
 import Message from './components/home_component/message'
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import Search from './components/search.jsx'
@@ -11,6 +11,7 @@ import Loading from './components/loading.jsx'
 import User from './components/user.jsx';
 import Agent from './components/ai_agent/agent.jsx'
 import './app.css';
+import Notification from './components/notification.jsx'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [agent, setAgent] = useState(false);
+  const [notify, setNotify] = useState(false);
   
 
   return (
@@ -29,10 +31,18 @@ function App() {
         }
         {enter && userData &&
           <div className='sticky top-0 z-50 flex'>
-            <Header select={select} setSelect={setSelect} userData={userData}/>
+            <div className={`p-2 text-xl flex items-center px-4 bg-white border-r border-zinc-200 shadow-md hover:bg-rose-100 cursor-pointer ${notify ? "text-rose-600" : "text-zinc-600"}`}
+              onClick={() => setNotify(e => !e)}
+            >
+              <FaBell/>
+            </div>
+            <Header select={select} setSelect={setSelect} userData={userData} />
           </div>
         }
 
+        {notify &&
+          <Notification setNotify={setNotify}/>
+        }
         <div className='flex w-full mx-auto sm:flex-row justify-center'>
 
           {enter && userData &&
@@ -49,7 +59,6 @@ function App() {
                 <Route path="/home" element={<Home setLoading={setLoading} userData={userData}/>} />
                 <Route path="/search" element={<Search setLoading={setLoading} userData={userData}/>} />
                 <Route path="/user/:id" element={<User setLoading={setLoading} userData={userData} setSelect={setSelect} setEnter={setEnter}/>} />
-                <Route path="/notification" element={<Home setLoading={setLoading} userData={userData}/>} />
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="/user" element={<Navigate to="/home" />} />
               </>

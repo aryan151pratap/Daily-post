@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import Frames from "./frames";
 import { FaThumbsUp, FaTimes } from "react-icons/fa";
 import Media from "./media";
+import { useEffect } from "react";
 
-const FullFrame = function({data, setfullFrame, likes}){
+const FullFrame = function({data, setfullFrame, likes, children }){
 	return(
 		<div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-[1px] p-2 flex items-center justify-center">
 			<div className="relative h-[700px] p-2 bg-white flex flex-col rounded-md overflow-auto">
@@ -26,8 +27,9 @@ const FullFrame = function({data, setfullFrame, likes}){
 					/>
 				</div>
 				<div className="w-full h-full flex items-center overflow-auto mt-auto">
-					<Media data={data} />
+					<Media postData={data} showFrame={true}/>
 				</div>
+				{children}
 			</div>
 		</div>
 	)

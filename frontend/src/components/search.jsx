@@ -86,7 +86,7 @@ function Search({ userData }) {
 
 	return (
 		<div className="md:w-xl sm:w-xs w-full h-full  p-2 sm:py-4 md:ml-0 sm:ml-4">
-			<div className={`relative w-full h-full ${show && "bg-zinc"} bg-white rounded-md border border-zinc-200`}>
+			<div className={`relative w-full h-full ${show && "bg-zinc"} flex flex-col bg-white rounded-md border border-zinc-200`}>
 
 				<div className="p-3 text-sm w-full flex flex-row gap-2">
 					<input
@@ -159,6 +159,33 @@ function Search({ userData }) {
 					</div>
 				)}
 
+				<div className="mt-auto">
+					{recent.length > 0 &&
+					<div className="px-2 underline text-zinc-500 border-t border-b border-zinc-100">
+						<p>recent</p>
+					</div>
+					}
+					<div className="overflow-auto max-h-[114px]">
+						{recent?.map((i, index) => (
+						<div key={index} className="p-2 hover:bg-zinc-200 flex flex-row items-center gap-2 border-b border-zinc-100 cursor-pointer">
+							<Link to={`/user/${i?._id}`} className="flex flex-row items-center gap-2">
+							<div className="shrink-0 w-10 h-10 rounded-md border border-zinc-200 overflow-hidden">
+								<img src={i?.image} alt="" className="w-full h-full object-cover"/>
+							</div>
+							<div className="flex hover:underline flex-col">
+								<p className="font-semibold text-zinc-800">{i?.username}</p>
+								<p className="text-xs text-zinc-500 line-clamp-1">{i?.bio}</p>
+							</div>
+							</Link>
+							<div className="ml-auto text-xs p-2 sm:text-zinc-400 text-zinc-600 sm:bg-zinc-200 bg-zinc-300 hover:text-zinc-600 hover:bg-zinc-300 rounded-md cursor-pointer"
+								onClick={() => handleDeleteRecent(i?._id)}
+							>
+								<FaTimes/>
+							</div>
+						</div>
+						))}
+					</div>
+				</div>
 			</div>
 		</div>
 	);

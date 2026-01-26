@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 const VITE_BACKEND = import.meta.env.VITE_BACKEND;
 
-const Frames = function({image, setfullFrame, imageCount, postId}){
+const Frames = function({image, setfullFrame, fullFrame, imageCount, postId}){
 	const [images, setImages] = useState([]);
 	const [play, setPlay] = useState(false);
 	const [current, setCurrent] = useState(0);
@@ -66,10 +66,11 @@ const Frames = function({image, setfullFrame, imageCount, postId}){
 	return(
 		<div className="w-full">
 			<div className="h-full border-t border-b border-zinc-200">
-
 				{imageCount > 1 ? 
 				<div className="relative min-h-55 flex items-center justify-center overflow-"
-					onClick={() => setfullFrame(true)}
+					onClick={() => {
+						if(!fullFrame) setfullFrame(true);
+					}}
 				>
 					{images.map((img, index) => (
 						<img
@@ -92,7 +93,9 @@ const Frames = function({image, setfullFrame, imageCount, postId}){
 				:
 				imageCount == 1 &&
 				<div className="h-[400px] w-full flex items-center justify-center overflow-hidden"
-					onClick={() => setfullFrame(true)}
+					onClick={() =>{
+						if(!fullFrame) setfullFrame(true);
+					}}
 				>
 					<img
 						src={images[current]}
