@@ -21,10 +21,9 @@ const Home = function ({ setLoading, userData }) {
 		const email = localStorage.getItem("daily-post-email");
 		console.log(hasMore);
 		if (!email || !hasMore) return;
-		if(skip == 0) setLoading(true);
+		// if(skip == 0) setLoading(true);
 		else setPostLoading(true);
 
-		// console.log(search);
 		const res = await fetch(`${VITE_BACKEND}/getPost/${email}/?skip=${skip}&limit=3&search=${search}`);
 		const result = await res.json();
 		console.log(result);
@@ -36,7 +35,7 @@ const Home = function ({ setLoading, userData }) {
 			setHasMore(false);
 		}
 
-		setLoading(false);
+		// setLoading(false);
 		setPostLoading(false);
 	}
 

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Home from './components/home'
 import Header from './components/header'
 import { FaBell, FaHome } from 'react-icons/fa'
-import Message from './components/home_component/message'
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import Search from './components/search.jsx'
 import Profile from './components/home_component/profile.jsx'
@@ -48,7 +47,6 @@ function App() {
           {enter && userData &&
           <div className='sticky top-14 hidden md:flex flex-col h-fit'>
             <Profile userData={userData} setSelect={setSelect}/>
-            <Message/>
           </div>
           }
 
