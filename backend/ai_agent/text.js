@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { simpleChat } = require("../controllers/chat");
+const { simpleChat } = require("../controllers/groq.js");
 const { runAction } = require("./action");
 
 
